@@ -223,7 +223,7 @@ input:focus ~ .bar:before, input:focus ~ .bar:after {
 
 .slide-menu-icon-wrapper {
   position: absolute;
-  right: 15px;
+  right: 30px;
   height: 30px;
   width: 30px;
   text-align: center;
@@ -255,8 +255,8 @@ input:focus ~ .bar:before, input:focus ~ .bar:after {
 
 .side-menu-wrapper-inactive {
   visibility: hidden ;
-  height: 0 ;
-  width: 0;
+  height: 0px;
+  width: 50px;
   color: transparent;
 }
 
