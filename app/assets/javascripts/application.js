@@ -92,8 +92,9 @@ $('document').ready(function () {
     var buildingTypeHouse      = new buildingType($('#building-type-house'));
     var buildingTypeApartment  = new buildingType($('#building-type-apartment'));
     var buildingTypeCommercial = new buildingType($('#building-type-commercial'));
+    var buildingTypeOther      = new buildingType($('#building-type-other'));
 
-    var buildingTypes = [buildingTypeCommercial,buildingTypeHouse,buildingTypeApartment];
+    var buildingTypes = [buildingTypeCommercial,buildingTypeHouse,buildingTypeApartment, buildingTypeOther];
 
     buildingTypes.forEach(function(buildingType) {
         $(buildingType.type).on('click', function () {
@@ -132,18 +133,28 @@ var slideMenu = {
     isOpened: false,
     toggle: function () {
         if(this.isOpened){
+            $('#open-side-menu-icon').removeClass('slide-menu-icon-wrapper-active');
+            $('#block-interapter').fadeOut();
             $(this.type).removeClass('side-menu-wrapper-active').removeClass('text-grey').addClass('side-menu-wrapper-inactive').addClass('text-transparent');
         } else {
-            $(this.type).removeClass('side-menu-wrapper-inactive').addClass('side-menu-wrapper-active', function () {
-                this.type.addClass('text-grey').removeClass('text-transparent');
-            });
+            $('#open-side-menu-icon').addClass('slide-menu-icon-wrapper-active');
+            $('#block-interapter').fadeIn();
+            $(this.type).removeClass('side-menu-wrapper-inactive').addClass('side-menu-wrapper-active');
         }
         this.isOpened = !this.isOpened;
     }
 }
 
 $('document').ready(function () {
+    $('#block-interapter').hide();
     $('#open-side-menu-icon').on('click', function () {
         slideMenu.toggle();
     })
+
+    $('#block-interapter').on('click', function () {
+       if(slideMenu.isOpened){
+           slideMenu.toggle();
+       }
+    });
+
 });
