@@ -1,0 +1,51 @@
+<div class="text-center card-wrapper" id="enter-zip-wrapper">
+
+  <script>
+
+        $('#interior-btn').on('click', function () {
+
+            var saveParams = {
+                interior: {
+                    bedrooms:    $('#bedroom-count').val(),
+                    livingrooms: $('#living-room-count').val(),
+                    bathrooms: $('#bathroom-count').val()
+                }
+            };
+
+            $('document').ready(function () {
+                var saveData = $.ajax({
+                    type: 'POST',
+                    url: "/save",
+                    beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
+                    data: saveParams,
+                    dataType: "json",
+                    success: function(resultData) {
+                        alert("Total price " + resultData['price'] + '$');
+                    },
+                    error: function (resultData) {
+                        alert('error');
+                    }
+                });
+            });
+
+        });
+
+
+  </script>
+
+  <h4 class="text-center">Interior setup</h4>
+
+
+  <input type="text" class="" value="0" id="bedroom-count" placeholder="Bed Rooms">
+
+  <input type="text" class="" value="0" id="living-room-count" placeholder="Living Rooms">
+
+  <input type="text" class="" value="0" id="bathroom-count" placeholder="Bathrooms Rooms">
+
+
+  <div class="main-action-button">
+    <a href="javascript:void();" class="btn btn-raised btn-primary" id="interior-btn">NEXT
+    </a>
+  </div>
+
+</div>

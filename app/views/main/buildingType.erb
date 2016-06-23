@@ -1,0 +1,158 @@
+<script>
+    // Building Type scripts
+    function changeElementState(element, isSelect){
+        if(!isSelect){
+            element.type.removeClass('building-type-active').addClass('building-type-disabled');
+        } else {
+            element.type.removeClass('building-type-disabled').addClass('building-type-active');
+        }
+        return isSelect;
+    };
+
+    function onElementClick(element, arrayOfElements) {
+        arrayOfElements.forEach(function(entry) {
+            if(entry == element){
+                entry.reverse();
+            } else {
+                entry.disable();
+            }
+        });
+    }
+
+
+    function buildingType (type) {
+        this.type = type;
+        this.isSelected = false;
+        this.reverse = function () {
+            this.isSelected = changeElementState(this, !this.isSelected);
+        };
+        this.disable = function () {
+            this.isSelected = false;
+            changeElementState(this, false);
+        };
+    }
+
+
+    $('document').ready(function () {
+        var buildingTypeHouse      = new buildingType($('#building-type-house'));
+        var buildingTypeApartment  = new buildingType($('#building-type-apartment'));
+        var buildingTypeCommercial = new buildingType($('#building-type-commercial'));
+        var buildingTypeOther      = new buildingType($('#building-type-other'));
+
+        var buildingTypes = [buildingTypeCommercial,buildingTypeHouse,buildingTypeApartment, buildingTypeOther];
+
+        buildingTypes.forEach(function(buildingType) {
+            $(buildingType.type).on('click', function () {
+                onElementClick(buildingType, buildingTypes);
+            });
+        });
+
+        $('#btn-building-type').on('click', function () {
+
+            var i = 0;
+
+            buildingTypes.forEach(function (buildingType) {
+                if (buildingType.isSelected) {
+                    i++;
+                }
+            });
+
+            if (i == 1) {
+                $('#enter-building-type-wrapper').fadeOut(function () {
+
+                    $.ajax({
+                        type: 'GET',
+                        url: "/interior",
+                        beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
+                        dataType: "html",
+                        success: function(resultData) {
+                            $('#card-wrapper').append(resultData);
+                        },
+                        error: function (resultData) {
+                            alert('error');
+                        }
+                    });
+
+                });
+            } else {
+                alert('Pick Building Type');
+            }
+
+
+        });
+
+    });
+
+</script>
+
+<div class="text-center card-wrapper" id="enter-building-type-wrapper">
+
+  <h4 class="text-center">Building type</h4>
+
+
+  <!-- commercial  -->
+  <div class="col-md-3 col-lg-3 col-sm-6 col-xs-6">
+
+    <div class="select-box-wrapper building-type-disabled" id="building-type-house">
+      <span class="check-span"> <i class="fa fa-check fa-lg" aria-hidden="true"></i> </span>
+      <i class="fa fa-home  fa-4x building-type-icon" aria-hidden="true"></i>
+
+      <div class="building-type-text-wrapper">
+        <span class="">House</span>
+      </div>
+    </div>
+
+  </div>
+
+
+  <!-- house -->
+
+  <div class="col-md-3 col-lg-3 col-sm-6 col-xs-6">
+
+    <div class="select-box-wrapper building-type-disabled" id="building-type-apartment">
+      <span class="check-span"> <i class="fa fa-check fa-lg" aria-hidden="true"></i> </span>
+
+      <i class="fa fa-building-o  fa-4x building-type-icon" aria-hidden="true"></i>
+
+      <div class="building-type-text-wrapper">
+        <span class="">Apartment</span>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- apartment -->
+
+  <div class="col-md-3 col-lg-3 col-sm-6 col-xs-6">
+
+    <div class="select-box-wrapper building-type-disabled" id="building-type-commercial">
+      <span class="check-span"> <i class="fa fa-check fa-lg" aria-hidden="true"></i> </span>
+      <i class="fa fa-university  fa-4x building-type-icon" aria-hidden="true"></i>
+
+      <div class="building-type-text-wrapper">
+        <span class="">Commercial</span>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="col-md-3 col-lg-3 col-sm-6 col-xs-6">
+
+    <div class="select-box-wrapper building-type-disabled" id="building-type-other">
+      <span class="check-span"> <i class="fa fa-check fa-lg" aria-hidden="true"></i> </span>
+      <i class="fa fa-ellipsis-h fa-4x building-type-icon" aria-hidden="true"></i>
+
+      <div class="building-type-text-wrapper">
+        <span class="">Other</span>
+      </div>
+    </div>
+
+  </div>
+
+
+  <div class="main-action-button">
+    <a href="javascript:void();" class="btn btn-raised btn-primary" id="btn-building-type">NEXT
+    </a>
+  </div>
+
+</div>
